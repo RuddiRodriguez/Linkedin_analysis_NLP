@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 24 23:35:47 2019
-
+In this module there are a set of functions desdicated to transform and prepared
+corpus data for further analysis using mchaine learning tools. 
 @author: ruddirodriguez
 """
 
@@ -19,14 +20,13 @@ from nltk.stem import WordNetLemmatizer
 from sklearn import model_selection, preprocessing
 
 
-def training_model_with_split (data,test_size,features_col,labels_col):
-    
-    
+def training_model_with_split(data, test_size, features_col, labels_col):
+
     list_features = data[features_col].tolist()
     list_labels = data[labels_col].tolist()
 
-    X_train, X_test, y_train, y_test = train_test_split(list_features, list_labels, test_size=test_size, 
-                                                                                random_state=40)
+    X_train, X_test, y_train, y_test = train_test_split(list_features, list_labels, test_size=test_size,
+                                                        random_state=40)
     return X_train, X_test, y_train, y_test
 
 
@@ -49,7 +49,7 @@ def removing_stop_words(data):
     return (data)
 
 
-def steamming(data,column_name):
+def steamming(data, column_name):
     #st = PorterStemmer()
     data['stem'] = data[column_name].apply(
         lambda x: " ".join([stem(word) for word in x.split()]))
@@ -58,7 +58,7 @@ def steamming(data,column_name):
     return data
 
 
-def lemmatizing(data,colum_name):
+def lemmatizing(data, colum_name):
     # st = PorterStemmer()
     nltk.download('wordnet')
     lemmatizer = WordNetLemmatizer()
@@ -80,8 +80,8 @@ def data_categorization(data):
     return data
 
 
-def data_encoder (data):
+def data_encoder(data):
     encoder = preprocessing.LabelEncoder()
     data_categor = encoder.fit_transform(data)
-    
+
     return data_categor
