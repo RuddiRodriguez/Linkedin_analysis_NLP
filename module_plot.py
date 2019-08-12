@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul 25 00:11:26 2019
-
+Module to plot differents output of the analysis 
 @author: ruddirodriguez
 """
 
