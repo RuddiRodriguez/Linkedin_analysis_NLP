@@ -74,13 +74,26 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 
 # p.set_printoptions(precision=2)
 
-def number_of_levels(data):
-    Level_count = data['Cat_level'].value_counts()
+def number_of_levels(data,colum_name):
+    Level_count = data[colum_name].value_counts()
     sns.set(style="darkgrid")
     sns.barplot(Level_count.index, Level_count.values, alpha=0.9)
     plt.title('Frequency Distribution of Level')
     plt.ylabel('Number of Occurrences', fontsize=12)
     plt.xlabel('Level', fontsize=12)
+    plt.show()
+
+    return plt
+
+
+def precision_number_training_data(data,ydata,colum_name):
+    xdata = data.groupby(colum_name).count()
+    fig = plt.figure(figsize=(5, 5))
+    plt.plot (xdata,ydata,'o')
+    sns.set(style="darkgrid")
+    plt.title('Correlation')
+    plt.ylabel('Recall', fontsize=12)
+    plt.xlabel('Number of samples in training data', fontsize=12)
     plt.show()
 
     return plt

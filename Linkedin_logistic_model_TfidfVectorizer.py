@@ -54,6 +54,16 @@ def ML_analysis(X_train, X_test, y_train, y_test, data):
                                classes=data.groupby(
                                    'Level').count().index,
                                title='Confusion matrix, without normalization')
+    plot.precision_number_training_data(training_data_clean,recall_score(y_test_encoder, predicted_level,average=None),'Level')
+
+                               
+#    accuracy, precision, recall, harmonic_mean = mo.get_metrics(
+#    y_test_encoder, predicted_level)
+#                               
+#    evaluation_list = {'Accuracy': accuracy, 'Precision': precision,
+#                   'Recall': recall, 'Harmonic mean': harmonic_mean}
+#
+#    print(evaluation_list)
 #
 #
 
@@ -72,10 +82,19 @@ X_train, X_test, y_train, y_test = md.training_model_with_split(
 ML_analysis(X_train, X_test, y_train, y_test, training_data_clean)
 
 
-real_data_name = 'demodatareal2.csv'
+real_data_name = 'demodatest.csv'
 Real_data = pd.read_csv(
     '/Users/ruddirodriguez/Dropbox/Machine_Learning/NLP/'+real_data_name)
 real_data_clean = preparing_data(Real_data)
 
 ML_analysis(training_data_clean['Description'].tolist(), real_data_clean['Description'].tolist(
 ), training_data_clean['Level'].tolist(), real_data_clean['Level'].tolist(), training_data_clean)
+
+
+merge_data=training_data.append(Real_data)
+merge_data_clean = preparing_data(merge_data)
+X_train, X_test, y_train, y_test = md.training_model_with_split(
+    merge_data_clean, 0.3, "Description", "Level")
+    
+ML_analysis(X_train, X_test, y_train, y_test, merge_data_clean) 
+
