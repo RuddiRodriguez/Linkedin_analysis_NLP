@@ -9,6 +9,7 @@ This script implement a logistic model , on a data  collected from linkedin.
 The aim of the model is to predict the seniority level of a given job 
 """
 import pandas as pd
+import numpy as np
  
 from sklearn.linear_model import LogisticRegression
 #from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
@@ -43,14 +44,14 @@ def ML_analysis(X_train, X_test, y_train, y_test, data):
      
     X_test_counts = count_vectorizer.transform(X_test)
      
-    logreg = LogisticRegression()  # C=30.0, class_weight='balanced', solver='newton-cg',
+    logreg = LogisticRegression(C=1)  # C=30.0, class_weight='balanced', solver='newton-cg',
     # multi_class='multinomial', n_jobs=-1, random_state=40)
      
     predicted_level = mo.train_model(
         logreg, X_train_counts, y_train, X_test_counts)
      
     print_summary(y_test, predicted_level,
-                  training_data_clean, "Cat_level")
+                  data, "Cat_level")
  
     plot.plot_confusion_matrix(y_test, predicted_level,
                                classes=data.groupby(
@@ -58,10 +59,9 @@ def ML_analysis(X_train, X_test, y_train, y_test, data):
                                title='Confusion matrix, without normalization')
  
  
-training_data_name = 'demodata.csv'
+training_data_name = 'demodata_training_full_v1.csv'
  
-training_data = pd.read_csv(
-    '/Users/ruddirodriguez/Dropbox/Machine_Learning/NLP/'+training_data_name)
+training_data = pd.read_csv(training_data_name)
  
  
 training_data_clean = preparing_data(training_data)
@@ -71,21 +71,20 @@ X_train, X_test, y_train, y_test = md.training_model_with_split(
 ML_analysis(X_train, X_test, y_train, y_test, training_data_clean)
  
  
-real_data_name = 'demodatareal2.csv'
-Real_data = pd.read_csv(
-    '/Users/ruddirodriguez/Dropbox/Machine_Learning/NLP/'+real_data_name)
+real_data_name = 'demodata.csv'
+Real_data = pd.read_csv(real_data_name)
 real_data_clean = preparing_data(Real_data)
 
 ML_analysis(training_data_clean['lemmatizing'].tolist(), real_data_clean['lemmatizing'].tolist(
-), training_data_clean['Level'].tolist(), real_data_clean['Level'].tolist(), training_data_clean) 
+), np.c_[training_data_clean['Level']], np.c_[real_data_clean['Level']], training_data_clean) 
  
 
-merge_data=training_data.append(Real_data)
-merge_data_clean = preparing_data(merge_data)
-X_train, X_test, y_train, y_test = md.training_model_with_split(
-    merge_data_clean, 0.3, "lemmatizing", "Level")
-    
-ML_analysis(X_train, X_test, y_train, y_test, merge_data_clean) 
+#merge_data=training_data.append(Real_data)
+#merge_data_clean = preparing_data(merge_data)
+#X_train, X_test, y_train, y_test = md.training_model_with_split(
+#    merge_data_clean, 0.3, "lemmatizing", "Level")
+#    
+#ML_analysis(X_train, X_test, y_train, y_test, merge_data_clean) 
 #accuracy, precision, recall, harmonic_mean = mo.get_metrics(
 #    y_test, y_predicted_counts)
 #
