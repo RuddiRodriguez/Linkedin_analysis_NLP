@@ -17,12 +17,8 @@ import module_data as md
 import module_model as mo
 import module_plot as plot
 from module_print import print_summary
+
 # Functions
- 
- 
-# def getting_working_data (data):
- 
- 
 def preparing_data(data):
     data = data[['Level', 'Type_of_Job', 'Description']]
     data = data[data.Level != 'Not Applicable']
@@ -34,9 +30,7 @@ def preparing_data(data):
     data_cleaned = md.data_categorization(data)
  
     return (data_cleaned)
- 
- 
- 
+  
 def ML_analysis(X_train, X_test, y_train, y_test, data):
  
     X_train_counts, count_vectorizer = mo.vectorizer(
@@ -58,12 +52,12 @@ def ML_analysis(X_train, X_test, y_train, y_test, data):
                                    'Cat_level').count().index,
                                title='Confusion matrix, without normalization')
  
- 
+# Load the data 
 training_data_name = 'demodata_training_full_v1.csv'
  
 training_data = pd.read_csv(training_data_name)
  
- 
+# Prepare the data 
 training_data_clean = preparing_data(training_data)
 X_train, X_test, y_train, y_test = md.training_model_with_split(
     training_data_clean, 0.2, "lemmatizing", "Level")
