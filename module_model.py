@@ -14,6 +14,10 @@ from sklearn.model_selection import KFold
 from sklearn.feature_extraction.text import TfidfTransformer
 import nltk
 from nltk.corpus import stopwords
+from sklearn.pipeline import Pipeline
+from module_transformers import FeatureSelector, cleaning_text_regular_exp, removing_stop_words
+from sklearn.model_selection import train_test_split
+from module_print import print_summary
 
 
 def vectorizer(data, range_d):
@@ -57,3 +61,63 @@ def get_metrics(y_test, y_predicted):
     return accuracy, precision, recall, harmonic_mean
 
     #print (accuracy, precision, recall, harmonic_mean)
+
+
+def ML_analysis_split(cleaned_data, column_target,classifier,label=None):
+    # Leave it as a dataframe because our pipeline is called on a
+    # pandas dataframe to extract the appropriate columns, remember?
+
+    X = cleaned_data.drop(column_target, axis=1)
+    # You can covert the target variable to numpy
+    y = cleaned_data[column_target].values
+
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description')),
+                                    ('Pre_selector', FeatureSelector('Description')),
+                                    ('vectorized', CountVectorizer()), ])
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # The full pipeline as a step in another pipeline with an estimator as the final step
+    full_pipeline_m = Pipeline(steps=[('full_pipeline', full_pipeline),
+
+                                      ('model', classifier())])
+
+    # Can call fit on it just like any other pipeline
+    full_pipeline_m.fit(X_train, y_train)
+    # Can predict with it like any other pipeline
+    y_pred = full_pipeline_m.predict(X_test)
+    print_summary(y_test, y_pred,
+                  cleaned_data, label)
+
+
+def ML_analysis_separated_data(cleaned_data, test_data ,column_target,classifier,label=None):
+    # Leave it as a dataframe because our pipeline is called on a
+    # pandas dataframe to extract the appropriate columns, remember?
+
+    X = cleaned_data.drop(column_target, axis=1)
+    # You can covert the target variable to numpy
+    y = cleaned_data[column_target].values
+    
+    X_test = test_data.drop(column_target, axis=1)
+    y_test = test_data[column_target].values
+    
+
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description')),
+                                    ('Pre_selector', FeatureSelector('Description')),
+                                    ('vectorized', CountVectorizer()), ])
+
+    
+
+    # The full pipeline as a step in another pipeline with an estimator as the final step
+    full_pipeline_m = Pipeline(steps=[('full_pipeline', full_pipeline),
+
+                                      ('model', classifier())])
+
+    # Can call fit on it just like any other pipeline
+    full_pipeline_m.fit(X_train, y_train)
+    # Can predict with it like any other pipeline
+    y_pred = full_pipeline_m.predict(X_test)
+    print_summary(y_test, y_pred,
+                  cleaned_data, label)
