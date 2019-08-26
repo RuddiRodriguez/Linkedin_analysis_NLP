@@ -20,6 +20,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn import model_selection, preprocessing
 
 
+
 def training_model_with_split(data, test_size, features_col, labels_col):
 
     list_features = data[features_col].tolist()

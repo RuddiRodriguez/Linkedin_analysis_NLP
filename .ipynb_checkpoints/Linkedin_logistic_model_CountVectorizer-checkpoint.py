@@ -17,8 +17,12 @@ import module_data as md
 import module_model as mo
 import module_plot as plot
 from module_print import print_summary
-
 # Functions
+ 
+ 
+# def getting_working_data (data):
+ 
+ 
 def preparing_data(data):
     data = data[['Level', 'Type_of_Job', 'Description']]
     data = data[data.Level != 'Not Applicable']
@@ -30,56 +34,47 @@ def preparing_data(data):
     data_cleaned = md.data_categorization(data)
  
     return (data_cleaned)
-  
+ 
+ 
+ 
 def ML_analysis(X_train, X_test, y_train, y_test, data):
  
     X_train_counts, count_vectorizer = mo.vectorizer(
         X_train,(1,2))
      
     X_test_counts = count_vectorizer.transform(X_test)
-    
-    # Select a logistic model
+     
     logreg = LogisticRegression(C=1)  # C=30.0, class_weight='balanced', solver='newton-cg',
     # multi_class='multinomial', n_jobs=-1, random_state=40)
-    
-    # Train the model and make predictions
+     
     predicted_level = mo.train_model(
         logreg, X_train_counts, y_train, X_test_counts)
-    
-    # Print score summary 
+     
     print_summary(y_test, predicted_level,
                   data, "Cat_level")
-    
-    # Plot confusion matrix
+ 
     plot.plot_confusion_matrix(y_test, predicted_level,
                                classes=data.groupby(
                                    'Cat_level').count().index,
                                title='Confusion matrix, without normalization')
-                               
-                               
  
-# Load test data 
+ 
 training_data_name = 'demodata_training_full_v1.csv'
  
 training_data = pd.read_csv(training_data_name)
  
-# Prepare the trianing data 
+ 
 training_data_clean = preparing_data(training_data)
 X_train, X_test, y_train, y_test = md.training_model_with_split(
     training_data_clean, 0.2, "lemmatizing", "Level")
-
-# ML 
+ 
 ML_analysis(X_train, X_test, y_train, y_test, training_data_clean)
  
-# Load test data  
+ 
 real_data_name = 'demodata.csv'
-
 Real_data = pd.read_csv(real_data_name)
-
-# Prepare the test data 
 real_data_clean = preparing_data(Real_data)
 
-# ML 
 ML_analysis(training_data_clean['lemmatizing'].tolist(), real_data_clean['lemmatizing'].tolist(
 ), np.c_[training_data_clean['Level']], np.c_[real_data_clean['Level']], training_data_clean) 
  
