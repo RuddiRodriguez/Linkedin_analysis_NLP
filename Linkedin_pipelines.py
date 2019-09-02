@@ -22,8 +22,6 @@ from sklearn.pipeline import Pipeline
 from module_model import ML_analysis_split, ML_analysis_separated_data
 
 
-
-
 # Create a function that
 def drop_nan(df, col):
     # drop nan values
@@ -42,24 +40,25 @@ def data_categorization(df, col):
     return df
 
 
+def loading_data():
+    training_data_name = 'demodata_training_full_v1.csv'
+    training_data = pd.read_csv('Data/' + training_data_name)
+    # Create a pipeline that applies the mean_age_by_group function
+    cleaned_data = (training_data.pipe(drop_nan, col='Level')
+                    # then applies the uppercase column name function
+                    .pipe(data_categorization, col='Level')
+                    )
+    # ML_analysis_split(cleaned_data, "Level",LogisticRegression,"Cat_level")
+
+    test_data_name = 'demodata.csv'
+    test_data = pd.read_csv('Data/' + test_data_name)
+    cleaned_data_test = (test_data.pipe(drop_nan, col='Level')
+                         # then applies the uppercase column name function
+                         .pipe(data_categorization, col='Level')
+                         )
+
+    ML_analysis_separated_data(cleaned_data, cleaned_data_test, "Level", LogisticRegression, "Cat_level")
 
 
-training_data_name = 'demodata_training_full_v1.csv'
-training_data = pd.read_csv('Data/' + training_data_name)
-# Create a pipeline that applies the mean_age_by_group function
-cleaned_data = (training_data.pipe(drop_nan, col='Level')
-                # then applies the uppercase column name function
-                .pipe(data_categorization, col='Level')
-                )
-#ML_analysis_split(cleaned_data, "Level",LogisticRegression,"Cat_level")
-
-
-test_data_name = 'demodata.csv'
-test_data = pd.read_csv('Data/' + test_data_name)
-cleaned_data_test = (test_data.pipe(drop_nan, col='Level')
-                # then applies the uppercase column name function
-                .pipe(data_categorization, col='Level')
-                )
-
-
-ML_analysis_separated_data(cleaned_data,cleaned_data_test, "Level",LogisticRegression,"Cat_level")
+if __name__ == '__main__':
+    loading_data()
