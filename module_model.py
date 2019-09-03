@@ -107,7 +107,9 @@ def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_
                                     ('pre_stop_words', removing_stop_words('Description','english')),
                                     ('pre_lemmatize', LemmatizeWord('Description')),
                                     ('Pre_selector', FeatureSelector('Description')),
-                                    ('vectorized', CountVectorizer()), ])
+                                    ('vectorized', CountVectorizer()),
+                                    ('tfidf', TfidfTransformer()),
+                                    ])
 
     
 
