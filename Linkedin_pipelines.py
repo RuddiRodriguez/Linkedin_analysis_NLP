@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Aug 26 00:53:08 2019
-#testd = cleaning_text_regular_exp ('Description')
-#dd = testd.transform (cleaned_data)
+#testd = CleaningTextRegularExp ('Description')
+#dd = testd.transform ( )
 #
 #
 #testr = removing_stop_words ('Description')

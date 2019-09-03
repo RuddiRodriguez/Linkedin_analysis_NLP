@@ -15,7 +15,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 import nltk
 from nltk.corpus import stopwords
 from sklearn.pipeline import Pipeline
-from module_transformers import FeatureSelector, cleaning_text_regular_exp, removing_stop_words
+from module_transformers import FeatureSelector, CleaningTextRegularExp, removing_stop_words, LemmatizeWord
 from sklearn.model_selection import train_test_split
 from module_print import print_summary
 
@@ -71,8 +71,8 @@ def ML_analysis_split(cleaned_data, column_target,classifier,label=None):
     # You can covert the target variable to numpy
     y = cleaned_data[column_target].values
 
-    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
-                                    ('pre_stop_words', removing_stop_words('Description')),
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', CleaningTextRegularExp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description','english')),
                                     ('Pre_selector', FeatureSelector('Description')),
                                     ('vectorized', CountVectorizer()), ])
 
@@ -103,8 +103,9 @@ def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_
     y_test = cleaned_test_data[column_target].values
     
 
-    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
-                                    ('pre_stop_words', removing_stop_words('Description')),
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', CleaningTextRegularExp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description','english')),
+                                    ('pre_lemmatize', LemmatizeWord('Description')),
                                     ('Pre_selector', FeatureSelector('Description')),
                                     ('vectorized', CountVectorizer()), ])
 
