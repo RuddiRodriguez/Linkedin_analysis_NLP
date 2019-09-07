@@ -17,23 +17,10 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 
-<<<<<<< Updated upstream
 from sklearn.pipeline import Pipeline
 from module_model import ML_analysis_split, ML_analysis_separated_data
 
 
-=======
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-from module_model import ML_analysis_split, ML_analysis_separated_data
-
-
-=======
->>>>>>> master
-=======
->>>>>>> master
->>>>>>> Stashed changes
 # Create a function that
 def drop_nan(df, col):
     # drop nan values
@@ -52,38 +39,12 @@ def data_categorization(df, col):
     return df
 
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-training_data_name = 'demodata_training_full_v1.csv'
-training_data = pd.read_csv('Data/' + training_data_name)
-# Create a pandas pipeline to prepare the data
-cleaned_data = (training_data.pipe(drop_nan, col='Level')
-                # then applies the uppercase column name function
-                .pipe(data_categorization, col='Level')
-                )
-# ML_analysis_split(cleaned_data, "Level",LogisticRegression,"Cat_level")
-
-
-test_data_name = 'demodata.csv'
-test_data = pd.read_csv('Data/' + test_data_name)
-cleaned_data_test = (test_data.pipe(drop_nan, col='Level')
-                     
-                     .pipe(data_categorization, col='Level')
-                     )
-
-ML_analysis_separated_data(cleaned_data, cleaned_data_test, "Level", LogisticRegression, "Cat_level")
-=======
-=======
->>>>>>> master
->>>>>>> Stashed changes
 def loading_data():
     training_data_name = 'demodata_training_full_v1.csv'
     training_data = pd.read_csv('Data/' + training_data_name)
-    # Create a pipeline that applies the mean_age_by_group function
+    # Create a pandas pipeline that prepare the data
     cleaned_data = (training_data.pipe(drop_nan, col='Level')
-                    # then applies the uppercase column name function
+                    # then applies the categorization
                     .pipe(data_categorization, col='Level')
                     )
     # ML_analysis_split(cleaned_data, "Level",LogisticRegression,"Cat_level")
@@ -91,7 +52,7 @@ def loading_data():
     test_data_name = 'demodata.csv'
     test_data = pd.read_csv('Data/' + test_data_name)
     cleaned_data_test = (test_data.pipe(drop_nan, col='Level')
-                         # then applies the uppercase column name function
+                         # then applies the categorization
                          .pipe(data_categorization, col='Level')
                          )
 
@@ -100,10 +61,3 @@ def loading_data():
 
 if __name__ == '__main__':
     loading_data()
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> master
->>>>>>> Stashed changes
