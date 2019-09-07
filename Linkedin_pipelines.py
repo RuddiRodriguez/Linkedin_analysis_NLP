@@ -53,7 +53,7 @@ cleaned_data = (training_data.pipe(drop_nan, col='Level')
 test_data_name = 'demodata.csv'
 test_data = pd.read_csv('Data/' + test_data_name)
 cleaned_data_test = (test_data.pipe(drop_nan, col='Level')
-                     # then applies the uppercase column name function
+                     
                      .pipe(data_categorization, col='Level')
                      )
 
