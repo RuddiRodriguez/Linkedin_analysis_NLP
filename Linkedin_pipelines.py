@@ -42,7 +42,7 @@ def data_categorization(df, col):
 
 training_data_name = 'demodata_training_full_v1.csv'
 training_data = pd.read_csv('Data/' + training_data_name)
-# Create a pipeline that applies the mean_age_by_group function
+# Create a pandas pipeline to prepare the data
 cleaned_data = (training_data.pipe(drop_nan, col='Level')
                 # then applies the uppercase column name function
                 .pipe(data_categorization, col='Level')
