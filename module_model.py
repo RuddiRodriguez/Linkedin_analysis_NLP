@@ -15,7 +15,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 import nltk
 from nltk.corpus import stopwords
 from sklearn.pipeline import Pipeline
-from module_transformers import FeatureSelector, cleaning_text_regular_exp, removing_stop_words
+from module_transformers import FeatureSelector, CleaningTextRegularExp, removing_stop_words, LemmatizeWord
 from sklearn.model_selection import train_test_split
 from module_print import print_summary
 
@@ -71,8 +71,8 @@ def ML_analysis_split(cleaned_data, column_target,classifier,label=None):
     # You can covert the target variable to numpy
     y = cleaned_data[column_target].values
 
-    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
-                                    ('pre_stop_words', removing_stop_words('Description')),
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', CleaningTextRegularExp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description','english')),
                                     ('Pre_selector', FeatureSelector('Description')),
                                     ('vectorized', CountVectorizer()), ])
 
@@ -91,22 +91,25 @@ def ML_analysis_split(cleaned_data, column_target,classifier,label=None):
                   cleaned_data, label)
 
 
-def ML_analysis_separated_data(cleaned_data, test_data ,column_target,classifier,label=None):
+def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_target,classifier,label=None):
     # Leave it as a dataframe because our pipeline is called on a
     # pandas dataframe to extract the appropriate columns, remember?
 
-    X = cleaned_data.drop(column_target, axis=1)
+    X_train = training_cleaned_data.drop(column_target, axis=1)
     # You can covert the target variable to numpy
-    y = cleaned_data[column_target].values
+    y_train = training_cleaned_data[column_target].values
     
-    X_test = test_data.drop(column_target, axis=1)
-    y_test = test_data[column_target].values
+    X_test = cleaned_test_data.drop(column_target, axis=1)
+    y_test = cleaned_test_data[column_target].values
     
 
-    full_pipeline = Pipeline(steps=[('pre_regular_exp', cleaning_text_regular_exp('Description')),
-                                    ('pre_stop_words', removing_stop_words('Description')),
+    full_pipeline = Pipeline(steps=[('pre_regular_exp', CleaningTextRegularExp('Description')),
+                                    ('pre_stop_words', removing_stop_words('Description','english')),
+                                    ('pre_lemmatize', LemmatizeWord('Description')),
                                     ('Pre_selector', FeatureSelector('Description')),
-                                    ('vectorized', CountVectorizer()), ])
+                                    ('vectorized', CountVectorizer()),
+                                    ('tfidf', TfidfTransformer()),
+                                    ])
 
     
 
@@ -120,4 +123,4 @@ def ML_analysis_separated_data(cleaned_data, test_data ,column_target,classifier
     # Can predict with it like any other pipeline
     y_pred = full_pipeline_m.predict(X_test)
     print_summary(y_test, y_pred,
-                  cleaned_data, label)
+                  training_cleaned_data, label)
