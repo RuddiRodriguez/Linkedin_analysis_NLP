@@ -18,6 +18,7 @@ from sklearn.pipeline import Pipeline
 from module_transformers import FeatureSelector, CleaningTextRegularExp, removing_stop_words, LemmatizeWord
 from sklearn.model_selection import train_test_split
 from module_print import print_summary
+import module_plot as plot
 
 
 def vectorizer(data, range_d):
@@ -91,7 +92,7 @@ def ML_analysis_split(cleaned_data, column_target,classifier,label=None):
                   cleaned_data, label)
 
 
-def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_target,classifier,label=None):
+def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_target,classifier,label="Level"):
     # Leave it as a dataframe because our pipeline is called on a
     # pandas dataframe to extract the appropriate columns, remember?
 
@@ -124,3 +125,8 @@ def ML_analysis_separated_data(training_cleaned_data, cleaned_test_data ,column_
     y_pred = full_pipeline_m.predict(X_test)
     print_summary(y_test, y_pred,
                   training_cleaned_data, label)
+    plot.plot_confusion_matrix(y_test, y_pred,
+                               classes=training_cleaned_data.groupby(
+                                   'Cat_level').count().index,
+                               title='Confusion matrix, without normalization')
+    

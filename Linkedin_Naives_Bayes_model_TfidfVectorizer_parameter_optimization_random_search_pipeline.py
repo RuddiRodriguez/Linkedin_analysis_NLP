@@ -46,8 +46,8 @@ def ML_analysis(X_train, X_test, y_train, y_test, data):
    #solver='saga', multi_class='multinomial',
                                 #class_weight='balanced'
                                 
-    param_grid={'vectorizer__ngram_range': [(1,1),(1,2) ,(2,2), (2,3),(1,4)],
-                'vectorizer__max_features':[ 5000, 8000, 9000, 10000],
+    param_grid={'vectorizer__ngram_range': [(1,1),(1,2) ,(2,2)],
+                'vectorizer__max_features':[ 9000, 10000],
                 'clf__alpha': np.linspace(0.5, 1.5, 6, 7)
                 }  
 
