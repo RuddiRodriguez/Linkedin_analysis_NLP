@@ -48,6 +48,6 @@ for i in idnumber:  # cycle through of the jobs full information
 
 
 data.to_csv(
-    r'/Users/ruddirodriguez/Dropbox/Machine_Learning/NLP/demodatest.csv ')
+    r'/Path_to_save/name.csv ')
 
 
